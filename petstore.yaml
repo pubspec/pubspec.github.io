@@ -6,7 +6,7 @@ info:
   license:
     name: Apache-2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-host: petstore.swagger.io
+host: api.pubi.org
 basePath: /v2
 tags:
   - name: pet
@@ -553,7 +553,7 @@ paths:
 securityDefinitions:
   petstore_auth:
     type: oauth2
-    authorizationUrl: 'http://petstore.swagger.io/api/oauth/dialog'
+    authorizationUrl: 'http://api.pubi.org/api/oauth/dialog'
     flow: implicit
     scopes:
       'write:pets': modify pets in your account
