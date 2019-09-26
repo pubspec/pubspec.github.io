@@ -1,0 +1,51 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "https://oss.sonatype.org/content/repositories/releases/"
+        }
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath "org.openapitools:openapi-generator-gradle-plugin:4.0.0"
+    }
+}
+
+apply plugin: 'org.openapi.generator'
+
+// Builds a Ruby API client by default.
+openApiGenerate {
+    generatorName = "ruby"
+    inputSpec = "$rootDir/petstore.yaml".toString()
+    outputDir = "$buildDir/ruby-api-client".toString()
+    configOptions = [
+            gemName: "petstore_client",
+            gemVersion: "1.2.4"
+    ]
+    systemProperties = [
+            modelDocs: "false"
+    ]
+    skipValidateSpec = true
+    logToStderr = true
+    generateAliasAsModel = false
+}
+
+task buildRubyClient(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask){
+    generatorName = "ruby"
+    inputSpec = "$rootDir/petstore.yaml".toString()
+    additionalProperties = [
+            packageName: "petstore"
+    ]
+    outputDir = "$buildDir/ruby-api-client".toString()
+    configOptions = [
+            gemName: "petstore_client",
+            gemVersion: "1.2.4"
+    ]
+}
+

@@ -28,7 +28,7 @@
                             <!-- output directory -->
                             <output>/var/tmp/ruby-api-client</output>
                             <!-- global option to skip spec validation -->
-                            <skipSpecValidation>true</skipSpecValidation>
+                            <skipValidateSpec>true</skipValidateSpec>
                             <!-- generator-specififed options -->
                             <configOptions>
                                 <gemName>petstore_client</gemName>
