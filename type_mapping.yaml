@@ -1,0 +1,33 @@
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: 'Alias as model demo'
+host: localhost
+basePath: /v2
+schemes:
+  - http
+paths:
+  /:
+    get:
+      tags:
+        - account
+      operationId: account_get_id
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Account'
+definitions:
+  Account:
+    title: An account
+    description: An account
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: integer
+        format: int64
+      amount:
+        type: number 
+        format: double
