@@ -1,0 +1,25 @@
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: 'Remove prefix in operationId'
+host: localhost
+basePath: /v2
+schemes:
+  - http
+paths:
+  /account:
+    get:
+      tags:
+        - account
+      operationId: account_get_id
+      responses:
+        '200':
+          description: OK
+  /transaction:
+    get:
+      tags:
+        - transaction 
+      operationId: transaction_get_id
+      responses:
+        '200':
+          description: OK

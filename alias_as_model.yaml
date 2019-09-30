@@ -1,0 +1,23 @@
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: 'Alias as model demo'
+host: localhost
+basePath: /v2
+schemes:
+  - http
+paths:
+  /:
+    get:
+      tags:
+        - account
+      operationId: account_get_id
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/StringBooleanMap'
+definitions:
+  StringBooleanMap:
+    additionalProperties:
+      type: boolean
