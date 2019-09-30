@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   version: 0.0.0
-  title: 'Alias as model demo'
+  title: 'Missing type in the parameter'
 host: localhost
 basePath: /v2
 schemes:
