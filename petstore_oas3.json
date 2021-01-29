@@ -1,16 +1,11 @@
-﻿{
+{
   "openapi": "3.0.0",
-  "servers": [
-    {
-      "url": "http://api.pubi.org/v2"
-    }
-  ],
   "info": {
     "description": "This is a sample server Petstore server. For this sample, you can use the api key `special-key` to test the authorization filters.",
     "version": "1.0.0",
-    "title": "OpenAPI Petstore",
+    "title": "Petstore",
     "license": {
-      "name": "Apache-2.0",
+      "name": "Apache 2.0",
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   },
@@ -37,6 +32,9 @@
         "summary": "Add a new pet to the store",
         "description": "",
         "operationId": "addPet",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Pet"
+        },
         "responses": {
           "405": {
             "description": "Invalid input"
@@ -49,10 +47,7 @@
               "read:pets"
             ]
           }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/Pet"
-        }
+        ]
       },
       "put": {
         "tags": [
@@ -61,6 +56,9 @@
         "summary": "Update an existing pet",
         "description": "",
         "operationId": "updatePet",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Pet"
+        },
         "responses": {
           "400": {
             "description": "Invalid ID supplied"
@@ -79,10 +77,7 @@
               "read:pets"
             ]
           }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/Pet"
-        }
+        ]
       }
     },
     "/pet/findByStatus": {
@@ -99,8 +94,7 @@
             "in": "query",
             "description": "Status values that need to be considered for filter",
             "required": true,
-            "style": "form",
-            "explode": false,
+            "explode": true,
             "schema": {
               "type": "array",
               "items": {
@@ -144,6 +138,7 @@
         "security": [
           {
             "petstore_auth": [
+              "write:pets",
               "read:pets"
             ]
           }
@@ -156,7 +151,7 @@
           "pet"
         ],
         "summary": "Finds Pets by tags",
-        "description": "Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
+        "description": "Muliple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
         "operationId": "findPetsByTags",
         "parameters": [
           {
@@ -164,23 +159,12 @@
             "in": "query",
             "description": "Tags to filter by",
             "required": true,
-            "style": "form",
-            "explode": false,
+            "explode": true,
             "schema": {
               "type": "array",
               "items": {
                 "type": "string"
               }
-            }
-          },
-          {
-            "name": "maxCount",
-            "in": "query",
-            "description": "Maximum number of items to return",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
             }
           }
         ],
@@ -213,6 +197,7 @@
         "security": [
           {
             "petstore_auth": [
+              "write:pets",
               "read:pets"
             ]
           }
@@ -265,7 +250,9 @@
         },
         "security": [
           {
-            "api_key": []
+            "api_key": [
+
+            ]
           }
         ]
       },
@@ -288,19 +275,6 @@
             }
           }
         ],
-        "responses": {
-          "405": {
-            "description": "Invalid input"
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ],
         "requestBody": {
           "content": {
             "application/x-www-form-urlencoded": {
@@ -319,7 +293,20 @@
               }
             }
           }
-        }
+        },
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -350,7 +337,10 @@
         ],
         "responses": {
           "400": {
-            "description": "Invalid pet value"
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Pet not found"
           }
         },
         "security": [
@@ -383,26 +373,6 @@
             }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ],
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -422,7 +392,27 @@
               }
             }
           }
-        }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "petstore_auth": [
+              "write:pets",
+              "read:pets"
+            ]
+          }
+        ]
       }
     },
     "/store/inventory": {
@@ -451,7 +441,9 @@
         },
         "security": [
           {
-            "api_key": []
+            "api_key": [
+
+            ]
           }
         ]
       }
@@ -464,6 +456,17 @@
         "summary": "Place an order for a pet",
         "description": "",
         "operationId": "placeOrder",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Order"
+              }
+            }
+          },
+          "description": "order placed for purchasing the pet",
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "successful operation",
@@ -483,17 +486,6 @@
           "400": {
             "description": "Invalid Order"
           }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Order"
-              }
-            }
-          },
-          "description": "order placed for purchasing the pet",
-          "required": true
         }
       }
     },
@@ -503,7 +495,7 @@
           "store"
         ],
         "summary": "Find purchase order by ID",
-        "description": "For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions",
+        "description": "For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions",
         "operationId": "getOrderById",
         "parameters": [
           {
@@ -515,7 +507,7 @@
               "type": "integer",
               "format": "int64",
               "minimum": 1,
-              "maximum": 5
+              "maximum": 10
             }
           }
         ],
@@ -548,7 +540,7 @@
           "store"
         ],
         "summary": "Delete purchase order by ID",
-        "description": "For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors",
+        "description": "For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors",
         "operationId": "deleteOrder",
         "parameters": [
           {
@@ -557,7 +549,9 @@
             "description": "ID of the order that needs to be deleted",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
             }
           }
         ],
@@ -579,16 +573,6 @@
         "summary": "Create user",
         "description": "This can only be done by the logged in user.",
         "operationId": "createUser",
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        },
-        "security": [
-          {
-            "auth_cookie": []
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -599,6 +583,11 @@
           },
           "description": "Created user object",
           "required": true
+        },
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
         }
       }
     },
@@ -610,18 +599,13 @@
         "summary": "Creates list of users with given input array",
         "description": "",
         "operationId": "createUsersWithArrayInput",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UserArray"
+        },
         "responses": {
           "default": {
             "description": "successful operation"
           }
-        },
-        "security": [
-          {
-            "auth_cookie": []
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/UserArray"
         }
       }
     },
@@ -633,18 +617,13 @@
         "summary": "Creates list of users with given input array",
         "description": "",
         "operationId": "createUsersWithListInput",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UserArray"
+        },
         "responses": {
           "default": {
             "description": "successful operation"
           }
-        },
-        "security": [
-          {
-            "auth_cookie": []
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/UserArray"
         }
       }
     },
@@ -663,8 +642,7 @@
             "description": "The user name for login",
             "required": true,
             "schema": {
-              "type": "string",
-              "pattern": "^[a-zA-Z0-9]+[a-zA-Z0-9\\.\\-_]*[a-zA-Z0-9]+$"
+              "type": "string"
             }
           },
           {
@@ -681,13 +659,6 @@
           "200": {
             "description": "successful operation",
             "headers": {
-              "Set-Cookie": {
-                "description": "Cookie authentication key for use with the `auth_cookie` apiKey authentication.",
-                "schema": {
-                  "type": "string",
-                  "example": "AUTH_KEY=abcde12345; Path=/; HttpOnly"
-                }
-              },
               "X-Rate-Limit": {
                 "description": "calls per hour allowed by the user",
                 "schema": {
@@ -696,7 +667,7 @@
                 }
               },
               "X-Expires-After": {
-                "description": "date in UTC when toekn expires",
+                "description": "date in UTC when token expires",
                 "schema": {
                   "type": "string",
                   "format": "date-time"
@@ -734,12 +705,7 @@
           "default": {
             "description": "successful operation"
           }
-        },
-        "security": [
-          {
-            "auth_cookie": []
-          }
-        ]
+        }
       }
     },
     "/user/{username}": {
@@ -754,7 +720,7 @@
           {
             "name": "username",
             "in": "path",
-            "description": "The name that needs to be fetched. Use user1 for testing.",
+            "description": "The name that needs to be fetched. Use user1 for testing. ",
             "required": true,
             "schema": {
               "type": "string"
@@ -796,24 +762,11 @@
           {
             "name": "username",
             "in": "path",
-            "description": "name that need to be deleted",
+            "description": "name that need to be updated",
             "required": true,
             "schema": {
               "type": "string"
             }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid user supplied"
-          },
-          "404": {
-            "description": "User not found"
-          }
-        },
-        "security": [
-          {
-            "auth_cookie": []
           }
         ],
         "requestBody": {
@@ -826,6 +779,14 @@
           },
           "description": "Updated user object",
           "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Invalid user supplied"
+          },
+          "404": {
+            "description": "User not found"
+          }
         }
       },
       "delete": {
@@ -853,15 +814,15 @@
           "404": {
             "description": "User not found"
           }
-        },
-        "security": [
-          {
-            "auth_cookie": []
-          }
-        ]
+        }
       }
     }
   },
+  "servers": [
+    {
+      "url": "http://api.pubi.org/v2"
+    }
+  ],
   "components": {
     "requestBodies": {
       "UserArray": {
@@ -900,7 +861,7 @@
         "type": "oauth2",
         "flows": {
           "implicit": {
-            "authorizationUrl": "http://api.pubi.org/api/oauth/dialog",
+            "authorizationUrl": "http://api.pubi.org/oauth/dialog",
             "scopes": {
               "write:pets": "modify pets in your account",
               "read:pets": "read your pets"
@@ -912,17 +873,10 @@
         "type": "apiKey",
         "name": "api_key",
         "in": "header"
-      },
-      "auth_cookie": {
-        "type": "apiKey",
-        "name": "AUTH_KEY",
-        "in": "cookie"
       }
     },
     "schemas": {
       "Order": {
-        "title": "Pet Order",
-        "description": "An order for a pets from the pet store",
         "type": "object",
         "properties": {
           "id": {
@@ -960,8 +914,6 @@
         }
       },
       "Category": {
-        "title": "Pet category",
-        "description": "A category for a pet",
         "type": "object",
         "properties": {
           "id": {
@@ -969,8 +921,7 @@
             "format": "int64"
           },
           "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9]+[a-zA-Z0-9\\.\\-_]*[a-zA-Z0-9]+$"
+            "type": "string"
           }
         },
         "xml": {
@@ -978,8 +929,6 @@
         }
       },
       "User": {
-        "title": "a User",
-        "description": "A User who is purchasing from the pet store",
         "type": "object",
         "properties": {
           "id": {
@@ -1015,8 +964,6 @@
         }
       },
       "Tag": {
-        "title": "Pet Tag",
-        "description": "A tag for a pet",
         "type": "object",
         "properties": {
           "id": {
@@ -1032,8 +979,6 @@
         }
       },
       "Pet": {
-        "title": "a Pet",
-        "description": "A pet for sale in the pet store",
         "type": "object",
         "required": [
           "name",
@@ -1086,8 +1031,6 @@
         }
       },
       "ApiResponse": {
-        "title": "An uploaded response",
-        "description": "Describes the result of uploading an image resource",
         "type": "object",
         "properties": {
           "code": {
